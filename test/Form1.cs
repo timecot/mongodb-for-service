@@ -25,7 +25,7 @@ namespace test
             GetListCollection("");
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             Form2 form2add = new Form2();
             form2add.Show();
@@ -46,7 +46,7 @@ namespace test
             DB.mongoDatabase.DropCollectionAsync(richTextBox1.Text);
         }
 
-        private async void button4_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e)
         {
             //dataGridInit();
             
@@ -84,10 +84,10 @@ namespace test
             dataGridView1.Columns[2].Name = "Other";
         }
 
-        private async void GetListCollection(string Filter)
+        private async void GetListCollection(string nameFilter)
         {
             dataGridInit();
-            var filter = Builders<DB.Item>.Filter.Regex("Name", Filter);
+            var filter = Builders<DB.Item>.Filter.Regex("Name", nameFilter);
 
             using (var cursor = await DB.mongoCollection.FindAsync(filter))
             {

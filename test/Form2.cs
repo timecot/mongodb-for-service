@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Word = Microsoft.Office.Interop.Word;
+using System.Windows.Xps.Packaging;
 
 namespace test
 {
@@ -19,11 +21,17 @@ namespace test
             InitializeComponent();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
+            /*
             var filter = Builders<DB.Item>.Filter.Regex("Name", "");
             long count = await DB.mongoCollection.CountAsync(filter);
             textBox1.Text = count.ToString();
+            */
+            var aWord = new Word.Application();
+            Word.Document doc = aWord.Documents.Add(Environment.CurrentDirectory.ToString()+"\\Doc1.dotx");
+            doc.Bookmarks["Name"].Range.Text = textBox1.Text;
+            doc.SaveAs2("1.xps", Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatXPS);
         }
     }
 }
