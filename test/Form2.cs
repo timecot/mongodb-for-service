@@ -21,6 +21,7 @@ namespace test
             Word.Document doc = aWord.Documents.Add(Environment.CurrentDirectory.ToString()+"\\Doc1.dotx");
             doc.Bookmarks["Name"].Range.Text = textBox1.Text;
             doc.SaveAs2(Environment.CurrentDirectory.ToString()+"\\1.xps", Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatXPS);
+
             System.Diagnostics.Process.Start("1.xps");
         }
     }
