@@ -33,7 +33,6 @@ namespace test
             doc.Bookmarks["Name"].Range.Text = textBox1.Text;
             doc.SaveAs2("1.xps", Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatXPS);
             System.Diagnostics.Process.Start("1.xps");
-            System.Diagnostics.Process.Start("1.xps");
         }
     }
 }
