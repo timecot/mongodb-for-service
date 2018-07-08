@@ -39,10 +39,15 @@ namespace test
         public class Item
         {
             public ObjectId Id { get; set; }
+            public DateTime Data { get; set; }
             public string Name { get; set; }
+            public string Tel { get; set; }
+            public string Adr { get; set; }
+            public string Imei { get; set; }
+            public string Brand { get; set; }
             public string Model { get; set; }
-            public string Item1 { get; set; }
         }
+        
     }
 }
 

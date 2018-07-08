@@ -15,20 +15,24 @@ namespace test
 {
     public partial class Form1 : Form
     {
+        public static Form1 Ref { get; set; }
         public Form1()
         {
+            Ref = this;
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             GetListCollection("");
+            //DB.mongoDatabase.CreateCollectionAsync("info");
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             Form2 form2add = new Form2();
-            form2add.Show();
+            //form2add.Show();
+            form2add.ShowDialog();
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -49,14 +53,14 @@ namespace test
         private void button4_Click(object sender, EventArgs e)
         {
             //dataGridInit();
-            
+
             //var filter = Builders<DB.Item>.Filter.Regex("Name", richTextBox1.Text);
             GetListCollection(richTextBox1.Text);
         }
 
         private void btnDelItem_Click(object sender, EventArgs e)
         {
-            var filter = Builders<DB.Item>.Filter.Regex("Name",richTextBox1.Text);
+            var filter = Builders<DB.Item>.Filter.Regex("Name", richTextBox1.Text);
             DB.mongoCollection.DeleteOne(filter);
             GetListCollection("");
         }
@@ -67,44 +71,50 @@ namespace test
 
             Item.Name = textBox1.Text;
             Item.Model = textBox2.Text;
-            Item.Item1 = textBox3.Text;
+            Item.Brand = textBox3.Text;
 
             //var doc = new BsonDocument { {"name", textBox1.Text}, {"id", textBox2.Text }, {"item1", textBox3.Text} };
             await DB.mongoCollection.InsertOneAsync(Item);
             GetListCollection("");
         }
 
-        private void dataGridInit()
+        public void dataGridInit()
         {
             dataGridView1.Rows.Clear();
-            dataGridView1.ColumnCount = 3;
+            dataGridView1.ColumnCount = 7;
 
-            dataGridView1.Columns[0].Name = "Name";
-            dataGridView1.Columns[1].Name = "Model";
-            dataGridView1.Columns[2].Name = "Other";
+            dataGridView1.Columns[0].Name = "Data";
+            dataGridView1.Columns[1].Name = "Name";
+            dataGridView1.Columns[2].Name = "Telephone";
+            dataGridView1.Columns[3].Name = "Address";
+            dataGridView1.Columns[4].Name = "Imei";
+            dataGridView1.Columns[5].Name = "Brand";
+            dataGridView1.Columns[6].Name = "Model";
         }
 
-        private async void GetListCollection(string nameFilter)
+        public async void GetListCollection(string nameFilter)
         {
-            dataGridInit();
-            var filter = Builders<DB.Item>.Filter.Regex("Name", nameFilter);
-
-            using (var cursor = await DB.mongoCollection.FindAsync(filter))
+            try
             {
-                while (await cursor.MoveNextAsync())
+                dataGridInit();
+                var filter = Builders<DB.Item>.Filter.Regex("Name", nameFilter);
+                using (var cursor = await DB.mongoCollection.FindAsync(filter))
                 {
-                    var c = cursor.Current;
-                    foreach (var listname in c)
+                    while (await cursor.MoveNextAsync())
                     {
-                        dataGridView1.Rows.Add(listname.Name, listname.Model, listname.Item1);
+                        var c = cursor.Current;
+                        foreach (var listname in c)
+                        {
+                            dataGridView1.Rows.Add(listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                        }
                     }
                 }
             }
+            catch
+            {
+                MessageBox.Show("Error: Not Conection To Server");
+            }
+            
         }
-
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-
-        }
-    }
+    }       
 }
