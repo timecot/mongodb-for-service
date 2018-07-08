@@ -7,8 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-//using MongoDB.Bson;
-//using MongoDB.Driver;
+using System.IO;
 using Word = Microsoft.Office.Interop.Word;
 //using System.Windows.Xps.Packaging;
 
@@ -51,6 +50,9 @@ namespace test
             item.Imei = textBoxImei.Text;
             item.Brand = textBoxBrand.Text;
             item.Model = textBoxModel.Text;
+
+            //item.Foto=File.ReadAllBytes("1.jpg");
+            //File.WriteAllBytes("2.jpg", (byte[])item.Foto);
 
             DB.mongoCollection.InsertOneAsync(item);
 

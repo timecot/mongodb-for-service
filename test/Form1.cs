@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
+//using System.Windows.Controls;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -106,13 +107,24 @@ namespace test
                         foreach (var listname in c)
                         {
                             dataGridView1.Rows.Add(listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                            //MessageBox.Show(listname.Foto.Length.ToString());
+                            /*
+                            if (listname.Foto.Length>1)
+                            {
+                                System.IO.File.WriteAllBytes("temp", listname.Foto);
+                                using (var tmp=new Bitmap("temp"))
+                                {
+                                    pictureBox1.Image = new Bitmap(tmp);
+                                }
+                            }
+                            */
                         }
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Error: Not Conection To Server");
+                MessageBox.Show("Error: Not Conection To Server"+ex);
             }
             
         }
