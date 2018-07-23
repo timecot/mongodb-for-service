@@ -18,6 +18,7 @@ namespace test
     {
         public static Form1 Ref { get; set; }
         public static DB.Item curItem { get; set; }
+
         public Form1()
         {
             Ref = this;
@@ -27,7 +28,6 @@ namespace test
         private void Form1_Load(object sender, EventArgs e)
         {
             GetListCollection("");
-            //DB.mongoDatabase.CreateCollectionAsync("info");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -44,10 +44,8 @@ namespace test
 
         private async void edit_btn_Click(object sender, EventArgs e)
         {
-            object nameFilter = ObjectId.GenerateNewId();
-            if (dataGridView1[0, dataGridView1.CurrentRow.Index].Value != null) { nameFilter = dataGridView1[0, dataGridView1.CurrentRow.Index].Value; }
-            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(nameFilter.ToString()));
-            
+            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(dataGridView1[0, dataGridView1.CurrentRow.Index].Value.ToString()));
+
             using (var cursor = await DB.mongoCollection.FindAsync(filter))
             {
                 curItem = await cursor.FirstOrDefaultAsync();
@@ -59,38 +57,15 @@ namespace test
 
         private async void button3_Click(object sender, EventArgs e)
         {
-            object nameFilter = ObjectId.GenerateNewId();
-            if (dataGridView1[0, dataGridView1.CurrentRow.Index].Value != null) { nameFilter = dataGridView1[0, dataGridView1.CurrentRow.Index].Value; }
-            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(nameFilter.ToString()));
-            await DB.mongoCollection.DeleteOneAsync(filter);
-            GetListCollection("");
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            //dataGridInit();
-
-            //var filter = Builders<DB.Item>.Filter.Regex("Name", richTextBox1.Text);
-            GetListCollection(richTextBox1.Text);
-        }
-
-        private void btnDelItem_Click(object sender, EventArgs e)
-        {
-            var filter = Builders<DB.Item>.Filter.Regex("Name", richTextBox1.Text);
-            DB.mongoCollection.DeleteOne(filter);
-            GetListCollection("");
-        }
-
-        private async void button6_Click(object sender, EventArgs e)
-        {
-            DB.Item Item = new DB.Item();
-
-            Item.Name = textBox1.Text;
-            Item.Model = textBox2.Text;
-            Item.Brand = textBox3.Text;
-
-            //var doc = new BsonDocument { {"name", textBox1.Text}, {"id", textBox2.Text }, {"item1", textBox3.Text} };
-            await DB.mongoCollection.InsertOneAsync(Item);
+            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(dataGridView1[0, dataGridView1.CurrentRow.Index].Value.ToString()));
+            try
+            {
+                await DB.mongoCollection.DeleteOneAsync(filter);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
             GetListCollection("");
         }
 
@@ -140,11 +115,27 @@ namespace test
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error: Not Conection To Server"+ex);
+                MessageBox.Show("Error: Not Conection To Server" + ex);
             }
-            
+
+        }
+
+        private async void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            DB.Item item = new DB.Item();
+            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(dataGridView1[0, dataGridView1.CurrentRow.Index].Value.ToString()));
+
+            using (var cursor = await DB.mongoCollection.FindAsync(filter))
+            {
+                item = await cursor.FirstOrDefaultAsync();
+                if (item != null)
+                {
+                    richTextBox3.Text = item.Name;
+                    richTextBox4.Text = item.Imei;
+                }
+            }
         }
     }       
 }
