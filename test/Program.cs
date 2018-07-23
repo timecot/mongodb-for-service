@@ -31,9 +31,10 @@ namespace test
 
         public static void DbConnect()
         {
-            mongoClient = new MongoClient("mongodb://139.59.134.64:9000");
+            //mongoClient = new MongoClient("mongodb://139.59.134.64:9000");
+            mongoClient = new MongoClient("mongodb://192.168.1.3:9000");
             mongoDatabase = mongoClient.GetDatabase("info");
-            mongoCollection = mongoDatabase.GetCollection<DB.Item>("info");
+            mongoCollection = mongoDatabase.GetCollection<Item>("info");
         }
 
         public class Item

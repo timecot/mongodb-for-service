@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Word = Microsoft.Office.Interop.Word;
+using MongoDB.Bson;
+using MongoDB.Driver;
 //using System.Windows.Xps.Packaging;
 
 namespace test
@@ -18,12 +20,57 @@ namespace test
         public Form2()
         {
             InitializeComponent();
+            if (Form1.curItem != null) { pull_item(Form1.curItem); };
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             DB.Item item = new DB.Item();
 
+            if(Form1.curItem==null)
+            {
+                print_xps();
+                push_item(item);
+                await DB.mongoCollection.InsertOneAsync(item);
+            }
+            else
+            {
+                push_item(item);
+                item.Id = Form1.curItem.Id;
+                var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(Form1.curItem.Id.ToString()));
+                await DB.mongoCollection.ReplaceOneAsync(filter, item);
+            }
+        }
+
+        private void Form2_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (Form1.Ref != null) { Form1.Ref.GetListCollection(""); };
+        }
+
+        private void pull_item(DB.Item item)
+        {
+            dateTimePicker1.Value = item.Data;
+            textBoxFIO.Text = item.Name;
+            textBoxTel.Text = item.Tel;
+            textBoxAdr.Text = item.Adr;
+            textBoxImei.Text = item.Imei;
+            textBoxBrand.Text = item.Brand;
+            textBoxModel.Text = item.Model;
+        }
+
+        private void push_item(DB.Item item)
+        {
+            item.Data = dateTimePicker1.Value.ToLocalTime();
+            item.Name = textBoxFIO.Text;
+            item.Tel = textBoxTel.Text;
+            item.Adr = textBoxAdr.Text;
+            item.Imei = textBoxImei.Text;
+            item.Brand = textBoxBrand.Text;
+            item.Model = textBoxModel.Text;
+        }
+
+        private void print_xps()
+        {
             try
             {
                 var aWord = new Word.Application();
@@ -43,26 +90,7 @@ namespace test
                 MessageBox.Show("Ошибка: " + ex);
             }
 
-            item.Data = dateTimePicker1.Value;
-            item.Name = textBoxFIO.Text;
-            item.Tel = textBoxTel.Text;
-            item.Adr = textBoxAdr.Text;
-            item.Imei = textBoxImei.Text;
-            item.Brand = textBoxBrand.Text;
-            item.Model = textBoxModel.Text;
-
-            //item.Foto=File.ReadAllBytes("1.jpg");
-            //File.WriteAllBytes("2.jpg", (byte[])item.Foto);
-
-            DB.mongoCollection.InsertOneAsync(item);
-
             System.Diagnostics.Process.Start("1.xps");
-
-        }
-
-        private void Form2_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (Form1.Ref != null) { Form1.Ref.GetListCollection(""); };
         }
     }
 }

@@ -17,6 +17,7 @@ namespace test
     public partial class Form1 : Form
     {
         public static Form1 Ref { get; set; }
+        public static DB.Item curItem { get; set; }
         public Form1()
         {
             Ref = this;
@@ -41,14 +42,28 @@ namespace test
             GetListCollection(richTextBox1.Text);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void edit_btn_Click(object sender, EventArgs e)
         {
-            DB.mongoDatabase.CreateCollectionAsync(richTextBox1.Text);
+            object nameFilter = ObjectId.GenerateNewId();
+            if (dataGridView1[0, dataGridView1.CurrentRow.Index].Value != null) { nameFilter = dataGridView1[0, dataGridView1.CurrentRow.Index].Value; }
+            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(nameFilter.ToString()));
+            
+            using (var cursor = await DB.mongoCollection.FindAsync(filter))
+            {
+                curItem = await cursor.FirstOrDefaultAsync();
+                Form2 form2add = new Form2();
+                form2add.ShowDialog();
+                curItem = null;
+            }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object sender, EventArgs e)
         {
-            DB.mongoDatabase.DropCollectionAsync(richTextBox1.Text);
+            object nameFilter = ObjectId.GenerateNewId();
+            if (dataGridView1[0, dataGridView1.CurrentRow.Index].Value != null) { nameFilter = dataGridView1[0, dataGridView1.CurrentRow.Index].Value; }
+            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(nameFilter.ToString()));
+            await DB.mongoCollection.DeleteOneAsync(filter);
+            GetListCollection("");
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -82,15 +97,18 @@ namespace test
         public void dataGridInit()
         {
             dataGridView1.Rows.Clear();
-            dataGridView1.ColumnCount = 7;
+            dataGridView1.ColumnCount = 8;
 
-            dataGridView1.Columns[0].Name = "Data";
-            dataGridView1.Columns[1].Name = "Name";
-            dataGridView1.Columns[2].Name = "Telephone";
-            dataGridView1.Columns[3].Name = "Address";
-            dataGridView1.Columns[4].Name = "Imei";
-            dataGridView1.Columns[5].Name = "Brand";
-            dataGridView1.Columns[6].Name = "Model";
+            dataGridView1.Columns[0].Name = "ObjectID";
+            dataGridView1.Columns[0].Visible = false;
+
+            dataGridView1.Columns[1].Name = "Data";
+            dataGridView1.Columns[2].Name = "Name";
+            dataGridView1.Columns[3].Name = "Telephone";
+            dataGridView1.Columns[4].Name = "Address";
+            dataGridView1.Columns[5].Name = "Imei";
+            dataGridView1.Columns[6].Name = "Brand";
+            dataGridView1.Columns[7].Name = "Model";
         }
 
         public async void GetListCollection(string nameFilter)
@@ -106,7 +124,7 @@ namespace test
                         var c = cursor.Current;
                         foreach (var listname in c)
                         {
-                            dataGridView1.Rows.Add(listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                            dataGridView1.Rows.Add(listname.Id, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
                             //MessageBox.Show(listname.Foto.Length.ToString());
                             /*
                             if (listname.Foto.Length>1)
