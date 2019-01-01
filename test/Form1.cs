@@ -72,18 +72,20 @@ namespace test
         public void dataGridInit()
         {
             dataGridView1.Rows.Clear();
-            dataGridView1.ColumnCount = 8;
+            dataGridView1.ColumnCount = 9;
 
             dataGridView1.Columns[0].Name = "ObjectID";
             dataGridView1.Columns[0].Visible = false;
+            dataGridView1.Columns[1].Name = "Status";
+            dataGridView1.Columns[1].Visible = false;
 
-            dataGridView1.Columns[1].Name = "Data";
-            dataGridView1.Columns[2].Name = "Name";
-            dataGridView1.Columns[3].Name = "Telephone";
-            dataGridView1.Columns[4].Name = "Address";
-            dataGridView1.Columns[5].Name = "Imei";
-            dataGridView1.Columns[6].Name = "Brand";
-            dataGridView1.Columns[7].Name = "Model";
+            dataGridView1.Columns[2].Name = "Data";
+            dataGridView1.Columns[3].Name = "Name";
+            dataGridView1.Columns[4].Name = "Telephone";
+            dataGridView1.Columns[5].Name = "Address";
+            dataGridView1.Columns[6].Name = "Imei";
+            dataGridView1.Columns[7].Name = "Brand";
+            dataGridView1.Columns[8].Name = "Model";
         }
 
         public async void GetListCollection(string nameFilter)
@@ -92,6 +94,13 @@ namespace test
             {
                 dataGridInit();
                 var filter = Builders<DB.Item>.Filter.Regex("Name", nameFilter);
+
+                string chstate = null;
+                foreach(var st in checkedListBox1.CheckedIndices)
+                {
+                    chstate = chstate + st.ToString();
+                }
+
                 using (var cursor = await DB.mongoCollection.FindAsync(filter))
                 {
                     while (await cursor.MoveNextAsync())
@@ -99,25 +108,44 @@ namespace test
                         var c = cursor.Current;
                         foreach (var listname in c)
                         {
-                            dataGridView1.Rows.Add(listname.Id, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
-                            //MessageBox.Show(listname.Foto.Length.ToString());
-                            /*
-                            if (listname.Foto.Length>1)
+                            switch(chstate)
                             {
-                                System.IO.File.WriteAllBytes("temp", listname.Foto);
-                                using (var tmp=new Bitmap("temp"))
-                                {
-                                    pictureBox1.Image = new Bitmap(tmp);
-                                }
+                                case "0":
+                                    if (listname.Status == 1)
+                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                    break;
+                                case "1":
+                                    if (listname.Status == 2)
+                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                    break;
+                                case "2":
+                                    if (listname.Status == 3)
+                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                    break;
+                                case "01":
+                                    if (listname.Status == 1 || listname.Status == 2)
+                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                    break;
+                                case "12":
+                                    if (listname.Status == 2 || listname.Status == 3)
+                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                    break;
+                                case "02":
+                                    if (listname.Status == 1 || listname.Status == 3)
+                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                    break;
+                                default:
+                                    dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                    break;
                             }
-                            */
+                            
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Not Conection To Server" + ex);
+                MessageBox.Show("Error: Not Conection To Server");// + ex);
             }
 
         }
@@ -137,5 +165,23 @@ namespace test
                 }
             }
         }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            GetListCollection("");
+        }
     }       
 }
+
+
+//MessageBox.Show(listname.Foto.Length.ToString());
+/*
+if (listname.Foto.Length>1)
+{
+    System.IO.File.WriteAllBytes("temp", listname.Foto);
+    using (var tmp=new Bitmap("temp"))
+    {
+        pictureBox1.Image = new Bitmap(tmp);
+    }
+}
+*/
