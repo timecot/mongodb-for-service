@@ -29,7 +29,7 @@ namespace test
 
             if(Form1.curItem==null)
             {
-                print_xps();
+                //print_xps();
                 push_item(item);
                 await DB.mongoCollection.InsertOneAsync(item);
             }
