@@ -61,7 +61,7 @@ namespace test
         private void push_item(DB.Item item)
         {
             item.Data = dateTimePicker1.Value.ToLocalTime();
-            item.Status = 1;
+            item.Status = 0;
             item.Name = textBoxFIO.Text;
             item.Tel = textBoxTel.Text;
             item.Adr = textBoxAdr.Text;

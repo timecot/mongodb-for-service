@@ -111,27 +111,27 @@ namespace test
                             switch(chstate)
                             {
                                 case "0":
-                                    if (listname.Status == 1)
+                                    if (listname.Status == 0)
                                         dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
                                     break;
                                 case "1":
-                                    if (listname.Status == 2)
+                                    if (listname.Status == 1)
                                         dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
                                     break;
                                 case "2":
-                                    if (listname.Status == 3)
+                                    if (listname.Status == 2)
                                         dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
                                     break;
                                 case "01":
-                                    if (listname.Status == 1 || listname.Status == 2)
+                                    if (listname.Status == 0 || listname.Status == 1)
                                         dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
                                     break;
                                 case "12":
-                                    if (listname.Status == 2 || listname.Status == 3)
+                                    if (listname.Status == 1 || listname.Status == 2)
                                         dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
                                     break;
                                 case "02":
-                                    if (listname.Status == 1 || listname.Status == 3)
+                                    if (listname.Status == 0 || listname.Status == 2)
                                         dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
                                     break;
                                 default:
