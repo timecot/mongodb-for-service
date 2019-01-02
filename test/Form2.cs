@@ -36,7 +36,7 @@ namespace test
         private async void button1_Click(object sender, EventArgs e)
         {
             DB.Item item = new DB.Item();
-            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(Form1.curItem.Id.ToString()));
+            var filter = Builders<DB.Item>.Filter.Eq("","");
 
             switch (Form1.keyMode)
             {
@@ -47,16 +47,18 @@ namespace test
                 case "edit":
                     push_item(item);
                     item.Id = Form1.curItem.Id;
+                    filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(Form1.curItem.Id.ToString()));
                     await DB.mongoCollection.ReplaceOneAsync(filter, item);
                     break;
                 case "done":
                     push_item(item);
                     item.Status = 1;
                     item.Id = Form1.curItem.Id;
+                    filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(Form1.curItem.Id.ToString()));
                     await DB.mongoCollection.ReplaceOneAsync(filter, item);
                     break;
             }
-            
+
             Close();
         }
 
