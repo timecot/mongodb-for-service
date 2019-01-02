@@ -57,6 +57,13 @@ namespace test
                     filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(Form1.curItem.Id.ToString()));
                     await DB.mongoCollection.ReplaceOneAsync(filter, item);
                     break;
+                case "issue":
+                    push_item(item);
+                    item.Status = 2;
+                    item.Id = Form1.curItem.Id;
+                    filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(Form1.curItem.Id.ToString()));
+                    await DB.mongoCollection.ReplaceOneAsync(filter, item);
+                    break;
             }
 
             Close();

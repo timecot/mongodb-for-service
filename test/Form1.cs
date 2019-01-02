@@ -148,7 +148,22 @@ namespace test
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Not Conection To Server");// + ex);
+                MessageBox.Show("Error: Not Conection To Server" + ex);
+            }
+
+            foreach(DataGridViewRow row in dataGridView1.Rows)
+            {
+                switch(row.Cells[1].Value.ToString())
+                {
+                    case "0":
+                        break;
+                    case "1":
+                        row.DefaultCellStyle.BackColor = Color.Blue;
+                        break;
+                    case "2":
+                        row.DefaultCellStyle.BackColor = Color.Red;
+                        break;
+                }
             }
 
             if (dataGridView1.RowCount == 0)
@@ -170,6 +185,22 @@ namespace test
                     richTextBox2.Text = item.Description;
                     richTextBox3.Text = item.Name;
                     richTextBox4.Text = item.Imei;
+
+                    switch(item.Status)
+                    {
+                        case 0:
+                            btnDone.Enabled = true;
+                            btnIssue.Enabled = false;
+                            break;
+                        case 1:
+                            btnDone.Enabled = false;
+                            btnIssue.Enabled = true;
+                            break;
+                        case 2:
+                            btnDone.Enabled = false;
+                            btnIssue.Enabled = false;
+                            break;
+                    }
                 }
             }
         }
@@ -191,9 +222,23 @@ namespace test
             using (var cursor = await DB.mongoCollection.FindAsync(filter))
             {
                 curItem = await cursor.FirstOrDefaultAsync();
-                Form2 form2add = new Form2();
+                Form2 form2done = new Form2();
                 keyMode = "done";
-                form2add.ShowDialog();
+                form2done.ShowDialog();
+                curItem = null;
+            }
+        }
+
+        private async void btnIssue_Click(object sender, EventArgs e)
+        {
+            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(dataGridView1[0, dataGridView1.CurrentRow.Index].Value.ToString()));
+
+            using (var cursor = await DB.mongoCollection.FindAsync(filter))
+            {
+                curItem = await cursor.FirstOrDefaultAsync();
+                Form2 form2iss = new Form2();
+                keyMode = "issue";
+                form2iss.ShowDialog();
                 curItem = null;
             }
         }

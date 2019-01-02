@@ -44,6 +44,7 @@
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.btnDone = new System.Windows.Forms.Button();
+            this.btnIssue = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -203,11 +204,22 @@
             this.btnDone.UseVisualStyleBackColor = true;
             this.btnDone.Click += new System.EventHandler(this.btnDone_Click);
             // 
+            // btnIssue
+            // 
+            this.btnIssue.Location = new System.Drawing.Point(883, 239);
+            this.btnIssue.Name = "btnIssue";
+            this.btnIssue.Size = new System.Drawing.Size(133, 23);
+            this.btnIssue.TabIndex = 21;
+            this.btnIssue.Text = "Issue";
+            this.btnIssue.UseVisualStyleBackColor = true;
+            this.btnIssue.Click += new System.EventHandler(this.btnIssue_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1028, 553);
+            this.Controls.Add(this.btnIssue);
             this.Controls.Add(this.btnDone);
             this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.groupBox1);
@@ -247,6 +259,7 @@
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.Button btnDone;
+        private System.Windows.Forms.Button btnIssue;
     }
 }
 
