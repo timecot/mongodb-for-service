@@ -42,7 +42,7 @@ namespace test
             GetListCollection(richTextBox1.Text);
         }
 
-        private async void edit_btn_Click(object sender, EventArgs e)
+        private async void btnEdit_Click(object sender, EventArgs e)
         {
             var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(dataGridView1[0, dataGridView1.CurrentRow.Index].Value.ToString()));
 
@@ -55,7 +55,7 @@ namespace test
             }
         }
 
-        private async void button3_Click(object sender, EventArgs e)
+        private async void bntDrop_Click(object sender, EventArgs e)
         {
             var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(dataGridView1[0, dataGridView1.CurrentRow.Index].Value.ToString()));
             try
@@ -72,7 +72,7 @@ namespace test
         public void dataGridInit()
         {
             dataGridView1.Rows.Clear();
-            dataGridView1.ColumnCount = 9;
+            dataGridView1.ColumnCount = 10;
 
             dataGridView1.Columns[0].Name = "ObjectID";
             dataGridView1.Columns[0].Visible = false;
@@ -86,6 +86,7 @@ namespace test
             dataGridView1.Columns[6].Name = "Imei";
             dataGridView1.Columns[7].Name = "Brand";
             dataGridView1.Columns[8].Name = "Model";
+            dataGridView1.Columns[9].Name = "Description";
         }
 
         public async void GetListCollection(string nameFilter)
@@ -112,30 +113,30 @@ namespace test
                             {
                                 case "0":
                                     if (listname.Status == 0)
-                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                        datagridadd(listname);
                                     break;
                                 case "1":
                                     if (listname.Status == 1)
-                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                        datagridadd(listname);
                                     break;
                                 case "2":
                                     if (listname.Status == 2)
-                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                        datagridadd(listname);
                                     break;
                                 case "01":
                                     if (listname.Status == 0 || listname.Status == 1)
-                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                        datagridadd(listname);
                                     break;
                                 case "12":
                                     if (listname.Status == 1 || listname.Status == 2)
-                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                        datagridadd(listname);
                                     break;
                                 case "02":
                                     if (listname.Status == 0 || listname.Status == 2)
-                                        dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                        datagridadd(listname);
                                     break;
                                 default:
-                                    dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model);
+                                    datagridadd(listname);
                                     break;
                             }
                             
@@ -148,6 +149,7 @@ namespace test
                 MessageBox.Show("Error: Not Conection To Server");// + ex);
             }
 
+            if (dataGridView1.RowCount == 0) { btnEdit.Enabled = false; btnDrop.Enabled = false; } else { btnEdit.Enabled = true; btnDrop.Enabled = true; };
         }
 
         private async void dataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -160,6 +162,7 @@ namespace test
                 item = await cursor.FirstOrDefaultAsync();
                 if (item != null)
                 {
+                    richTextBox2.Text = item.Description;
                     richTextBox3.Text = item.Name;
                     richTextBox4.Text = item.Imei;
                 }
@@ -169,6 +172,11 @@ namespace test
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             GetListCollection("");
+        }
+
+        private void datagridadd(DB.Item listname)
+        {
+            dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model, listname.Description);
         }
     }       
 }

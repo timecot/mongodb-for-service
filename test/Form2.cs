@@ -40,6 +40,7 @@ namespace test
                 var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(Form1.curItem.Id.ToString()));
                 await DB.mongoCollection.ReplaceOneAsync(filter, item);
             }
+            Close();
         }
 
         private void Form2_FormClosed(object sender, FormClosedEventArgs e)
@@ -50,12 +51,26 @@ namespace test
         private void pull_item(DB.Item item)
         {
             dateTimePicker1.Value = item.Data;
+            switch (item.Status)
+            {
+                case 0:
+                    checkedListBox1.SetItemChecked(0, true);
+                    break;
+                case 1:
+                    checkedListBox1.SetItemChecked(1, true);
+                    break;
+                case 2:
+                    checkedListBox1.SetItemChecked(2, true);
+                    break;
+            }
+
             textBoxFIO.Text = item.Name;
             textBoxTel.Text = item.Tel;
             textBoxAdr.Text = item.Adr;
             textBoxImei.Text = item.Imei;
             textBoxBrand.Text = item.Brand;
             textBoxModel.Text = item.Model;
+            richTextBox1.Text = item.Description;
         }
 
         private void push_item(DB.Item item)
@@ -68,6 +83,7 @@ namespace test
             item.Imei = textBoxImei.Text;
             item.Brand = textBoxBrand.Text;
             item.Model = textBoxModel.Text;
+            item.Description = richTextBox1.Text;
         }
 
         private void print_xps()
