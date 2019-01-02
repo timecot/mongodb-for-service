@@ -18,6 +18,7 @@ namespace test
     {
         public static Form1 Ref { get; set; }
         public static DB.Item curItem { get; set; }
+        public static string keyMode { get; set; }
 
         public Form1()
         {
@@ -30,10 +31,10 @@ namespace test
             GetListCollection("");
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
             Form2 form2add = new Form2();
-            //form2add.Show();
+            keyMode = "add";
             form2add.ShowDialog();
         }
 
@@ -49,8 +50,9 @@ namespace test
             using (var cursor = await DB.mongoCollection.FindAsync(filter))
             {
                 curItem = await cursor.FirstOrDefaultAsync();
-                Form2 form2add = new Form2();
-                form2add.ShowDialog();
+                Form2 form2edt = new Form2();
+                keyMode = "edit";
+                form2edt.ShowDialog();
                 curItem = null;
             }
         }
@@ -149,7 +151,10 @@ namespace test
                 MessageBox.Show("Error: Not Conection To Server");// + ex);
             }
 
-            if (dataGridView1.RowCount == 0) { btnEdit.Enabled = false; btnDrop.Enabled = false; } else { btnEdit.Enabled = true; btnDrop.Enabled = true; };
+            if (dataGridView1.RowCount == 0)
+                { btnEdit.Enabled = false; btnDrop.Enabled = false; btnDone.Enabled = false; }
+            else
+                { btnEdit.Enabled = true; btnDrop.Enabled = true; btnDone.Enabled = true; };
         }
 
         private async void dataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -177,6 +182,20 @@ namespace test
         private void datagridadd(DB.Item listname)
         {
             dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model, listname.Description);
+        }
+
+        private async void btnDone_Click(object sender, EventArgs e)
+        {
+            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(dataGridView1[0, dataGridView1.CurrentRow.Index].Value.ToString()));
+
+            using (var cursor = await DB.mongoCollection.FindAsync(filter))
+            {
+                curItem = await cursor.FirstOrDefaultAsync();
+                Form2 form2add = new Form2();
+                keyMode = "done";
+                form2add.ShowDialog();
+                curItem = null;
+            }
         }
     }       
 }

@@ -57,7 +57,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "New Record";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // richTextBox1
             // 
@@ -201,6 +201,7 @@
             this.btnDone.TabIndex = 20;
             this.btnDone.Text = "Done";
             this.btnDone.UseVisualStyleBackColor = true;
+            this.btnDone.Click += new System.EventHandler(this.btnDone_Click);
             // 
             // Form1
             // 

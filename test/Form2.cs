@@ -21,25 +21,42 @@ namespace test
         {
             InitializeComponent();
             if (Form1.curItem != null) { pull_item(Form1.curItem); };
+
+            switch(Form1.keyMode)
+            {
+                case "add":
+                    break;
+                case "edit":
+                    break;
+                default:
+                    break;
+            }
         }
 
         private async void button1_Click(object sender, EventArgs e)
         {
             DB.Item item = new DB.Item();
+            var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(Form1.curItem.Id.ToString()));
 
-            if(Form1.curItem==null)
+            switch (Form1.keyMode)
             {
-                //print_xps();
-                push_item(item);
-                await DB.mongoCollection.InsertOneAsync(item);
+                case "add":
+                    push_item(item);
+                    await DB.mongoCollection.InsertOneAsync(item);
+                    break;
+                case "edit":
+                    push_item(item);
+                    item.Id = Form1.curItem.Id;
+                    await DB.mongoCollection.ReplaceOneAsync(filter, item);
+                    break;
+                case "done":
+                    push_item(item);
+                    item.Status = 1;
+                    item.Id = Form1.curItem.Id;
+                    await DB.mongoCollection.ReplaceOneAsync(filter, item);
+                    break;
             }
-            else
-            {
-                push_item(item);
-                item.Id = Form1.curItem.Id;
-                var filter = Builders<DB.Item>.Filter.Eq("_id", ObjectId.Parse(Form1.curItem.Id.ToString()));
-                await DB.mongoCollection.ReplaceOneAsync(filter, item);
-            }
+            
             Close();
         }
 
@@ -76,7 +93,7 @@ namespace test
         private void push_item(DB.Item item)
         {
             item.Data = dateTimePicker1.Value.ToLocalTime();
-            item.Status = 0;
+            //item.Status = 0;
             item.Name = textBoxFIO.Text;
             item.Tel = textBoxTel.Text;
             item.Adr = textBoxAdr.Text;

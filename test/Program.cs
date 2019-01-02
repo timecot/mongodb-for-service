@@ -40,7 +40,7 @@ namespace test
         public class Item
         {
             public ObjectId Id { get; set; }
-            public int Status { get; set; }
+            public int Status { get; set; } = 0;
             public DateTime Data { get; set; }
             public string Name { get; set; }
             public string Tel { get; set; }
