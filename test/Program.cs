@@ -31,8 +31,8 @@ namespace test
 
         public static void DbConnect()
         {
-            //mongoClient = new MongoClient("mongodb://139.59.134.64:9000");
-            mongoClient = new MongoClient("mongodb://202.182.100.146:9000");
+            mongoClient = new MongoClient("mongodb://192.168.1.3:9000");
+            //mongoClient = new MongoClient("mongodb://202.182.100.146:9000");
             mongoDatabase = mongoClient.GetDatabase("info");
             mongoCollection = mongoDatabase.GetCollection<Item>("info");
         }
@@ -49,6 +49,7 @@ namespace test
             public string Brand { get; set; }
             public string Model { get; set; }
             public string Description { get; set; }
+            public string Price { get; set; }
             public byte[] Foto { get; set; }
         }
         

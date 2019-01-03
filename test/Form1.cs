@@ -74,7 +74,7 @@ namespace test
         public void dataGridInit()
         {
             dataGridView1.Rows.Clear();
-            dataGridView1.ColumnCount = 10;
+            dataGridView1.ColumnCount = 11;
 
             dataGridView1.Columns[0].Name = "ObjectID";
             dataGridView1.Columns[0].Visible = false;
@@ -89,6 +89,7 @@ namespace test
             dataGridView1.Columns[7].Name = "Brand";
             dataGridView1.Columns[8].Name = "Model";
             dataGridView1.Columns[9].Name = "Description";
+            dataGridView1.Columns[10].Name = "Price";
         }
 
         public async void GetListCollection(string nameFilter)
@@ -167,9 +168,13 @@ namespace test
             }
 
             if (dataGridView1.RowCount == 0)
-                { btnEdit.Enabled = false; btnDrop.Enabled = false; btnDone.Enabled = false; }
+                { btnEdit.Enabled = false; btnDrop.Enabled = false; btnDone.Enabled = false; btnIssue.Enabled = false; }
             else
-                { btnEdit.Enabled = true; btnDrop.Enabled = true; btnDone.Enabled = true; };
+                { btnEdit.Enabled = true; btnDrop.Enabled = true; btnDone.Enabled = true; btnIssue.Enabled = true; };
+
+            richTextBox2.Clear();
+            richTextBox3.Clear();
+            richTextBox4.Clear();
         }
 
         private async void dataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -212,7 +217,7 @@ namespace test
 
         private void datagridadd(DB.Item listname)
         {
-            dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model, listname.Description);
+            dataGridView1.Rows.Add(listname.Id, listname.Status, listname.Data.ToShortDateString(), listname.Name, listname.Tel, listname.Adr, listname.Imei, listname.Brand, listname.Model, listname.Description, listname.Price);
         }
 
         private async void btnDone_Click(object sender, EventArgs e)

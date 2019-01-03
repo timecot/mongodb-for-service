@@ -32,13 +32,14 @@
             this.textBoxFIO = new System.Windows.Forms.TextBox();
             this.textBoxAdr = new System.Windows.Forms.TextBox();
             this.textBoxTel = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnOk = new System.Windows.Forms.Button();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.textBoxModel = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxBrand = new System.Windows.Forms.TextBox();
@@ -47,8 +48,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.textBoxPrice = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -74,15 +76,15 @@
             this.textBoxTel.Size = new System.Drawing.Size(135, 20);
             this.textBoxTel.TabIndex = 2;
             // 
-            // button1
+            // btnOk
             // 
-            this.button1.Location = new System.Drawing.Point(713, 415);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnOk.Location = new System.Drawing.Point(713, 415);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.Size = new System.Drawing.Size(75, 23);
+            this.btnOk.TabIndex = 3;
+            this.btnOk.Text = "Ok";
+            this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // printPreviewDialog1
             // 
@@ -141,6 +143,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.textBoxPrice);
+            this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.textBoxModel);
             this.groupBox2.Controls.Add(this.label3);
@@ -154,6 +158,16 @@
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Инфо";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(208, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(119, 18);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "Неисправность:";
             // 
             // textBoxModel
             // 
@@ -227,23 +241,30 @@
             this.checkedListBox1.Size = new System.Drawing.Size(209, 49);
             this.checkedListBox1.TabIndex = 7;
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(208, 16);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(119, 18);
-            this.label7.TabIndex = 6;
-            this.label7.Text = "Неисправность:";
-            // 
             // richTextBox1
             // 
             this.richTextBox1.Location = new System.Drawing.Point(573, 84);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(209, 71);
+            this.richTextBox1.Size = new System.Drawing.Size(209, 45);
             this.richTextBox1.TabIndex = 7;
             this.richTextBox1.Text = "";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label8.Location = new System.Drawing.Point(208, 66);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(90, 18);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "Стоимость:";
+            // 
+            // textBoxPrice
+            // 
+            this.textBoxPrice.Location = new System.Drawing.Point(333, 67);
+            this.textBoxPrice.Name = "textBoxPrice";
+            this.textBoxPrice.Size = new System.Drawing.Size(209, 20);
+            this.textBoxPrice.TabIndex = 8;
             // 
             // Form2
             // 
@@ -254,7 +275,7 @@
             this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnOk);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form2";
             this.Text = "Form2";
@@ -272,7 +293,7 @@
         private System.Windows.Forms.TextBox textBoxFIO;
         private System.Windows.Forms.TextBox textBoxAdr;
         private System.Windows.Forms.TextBox textBoxTel;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.PrintPreviewDialog printPreviewDialog1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -289,5 +310,7 @@
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.TextBox textBoxPrice;
+        private System.Windows.Forms.Label label8;
     }
 }

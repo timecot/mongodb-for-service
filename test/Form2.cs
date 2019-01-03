@@ -1,16 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+//using System.Collections.Generic;
+//using System.ComponentModel;
+//using System.Data;
+//using System.Drawing;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using Word = Microsoft.Office.Interop.Word;
+//using Word = Microsoft.Office.Interop.Word;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 //using System.Windows.Xps.Packaging;
 
 namespace test
@@ -33,7 +35,7 @@ namespace test
             }
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private async void btnOk_Click(object sender, EventArgs e)
         {
             DB.Item item = new DB.Item();
             var filter = Builders<DB.Item>.Filter.Eq("","");
@@ -43,6 +45,7 @@ namespace test
                 case "add":
                     push_item(item);
                     await DB.mongoCollection.InsertOneAsync(item);
+                    print_pdf();
                     break;
                 case "edit":
                     push_item(item);
@@ -97,6 +100,7 @@ namespace test
             textBoxBrand.Text = item.Brand;
             textBoxModel.Text = item.Model;
             richTextBox1.Text = item.Description;
+            textBoxPrice.Text = item.Price;
         }
 
         private void push_item(DB.Item item)
@@ -110,30 +114,35 @@ namespace test
             item.Brand = textBoxBrand.Text;
             item.Model = textBoxModel.Text;
             item.Description = richTextBox1.Text;
+            item.Price = textBoxPrice.Text;
         }
 
-        private void print_xps()
+        private void print_pdf()
         {
             try
             {
-                var aWord = new Word.Application();
-                Word.Document doc = aWord.Documents.Add(Environment.CurrentDirectory.ToString() + "\\Doc1.dotx");
+                Document myDocument = new Document(PageSize.A4);
+                PdfWriter.GetInstance(myDocument, new FileStream("1.pdf", FileMode.Create));
+                myDocument.Open();
 
-                doc.Bookmarks["Name"].Range.Text = textBoxFIO.Text;
-                doc.Bookmarks["Tel"].Range.Text = textBoxTel.Text;
-                doc.Bookmarks["Adr"].Range.Text = textBoxAdr.Text;
-                doc.Bookmarks["IMEI"].Range.Text = textBoxImei.Text;
-                doc.Bookmarks["Brand"].Range.Text = textBoxBrand.Text;
-                doc.Bookmarks["Model"].Range.Text = textBoxModel.Text;
-                doc.SaveAs2(Environment.CurrentDirectory + "\\1.xps", Word.WdSaveFormat.wdFormatXPS);
-                aWord.Quit(false);
+                string fg = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.TTF");
+                BaseFont bfont = BaseFont.CreateFont(fg, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                Font font = new Font(bfont, 12);
+
+                myDocument.Add(new Paragraph("--------------------------Reports--------------------------", font));
+                myDocument.Add(new Paragraph("Имя: " + textBoxFIO.Text, font));
+                myDocument.Add(new Paragraph("Телефон: " + textBoxTel.Text, font));
+                myDocument.Add(new Paragraph("Адрес: " + textBoxAdr.Text, font));
+                myDocument.Add(new Paragraph("Фирма: " + textBoxBrand.Text, font));
+                myDocument.Add(new Paragraph("Модель: " + textBoxModel.Text, font));
+
+                myDocument.Close();
+                System.Diagnostics.Process.Start("1.pdf");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Ошибка: " + ex);
             }
-
-            System.Diagnostics.Process.Start("1.xps");
         }
     }
 }
